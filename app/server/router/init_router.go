@@ -7,9 +7,6 @@ import (
 )
 
 func InitRouter() {
-	r := global.Engine
-	if r == nil {
-		r = gin.New()
-	}
+	r := global.GetEngine()
 	r.Use(gin.Recovery())
 }
