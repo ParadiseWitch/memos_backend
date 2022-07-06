@@ -6,7 +6,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	routerRole = make([]func(*gin.RouterGroup), 0)
+)
+
 func InitRouter() {
 	r := global.GetEngine()
-	r.Use(gin.Recovery())
+	v1 := r.Group("/api/v1")
+	for _, f := range routerRole {
+		f(v1)
+	}
+	r.Run()
 }

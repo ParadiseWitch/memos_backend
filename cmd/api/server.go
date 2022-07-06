@@ -37,5 +37,6 @@ func setup() {
 }
 
 func run() error {
+	router.InitRouter()
 	return nil
 }
