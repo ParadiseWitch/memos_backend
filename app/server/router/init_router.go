@@ -11,7 +11,7 @@ var (
 )
 
 func InitRouter() {
-	r := global.GetEngine()
+	r := global.Engine
 	v1 := r.Group("/api/v1")
 	for _, f := range routerRole {
 		f(v1)
