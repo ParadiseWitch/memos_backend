@@ -23,7 +23,7 @@ func home(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"name": "Maid",
 		"age":  14,
-		"msg":  global.GetConfig().Application.Name,
+		"msg":  global.Config.Application.Name,
 		"msg2": config.Conf.Application.Name,
 	})
 }

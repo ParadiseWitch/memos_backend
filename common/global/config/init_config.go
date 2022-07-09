@@ -28,6 +28,7 @@ func initViper() {
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		// callback if config file changed
 		fmt.Println("config file changed:", e.Name)
+		// FIXME: Concurrency issues, If you keep pressing save in the editor, panic will occur
 		InitConfig()
 	})
 }
@@ -40,30 +41,33 @@ func defaultConfig() {
 
 func InitConfig() {
 	initViper()
-	application := &Application{
+	application := Application{
 		Mode: AppMode(viper.GetString("config.application.mode")),
 		Host: viper.GetString("config.application.host"),
 		Name: viper.GetString("config.application.name"),
 		Port: viper.GetInt("config.application.port"),
 	}
-	db := &Db{
+	db := Db{
 		Host:     viper.GetString("config.db.host"),
 		Port:     viper.GetInt("config.db.port"),
 		User:     viper.GetString("config.db.user"),
 		Name:     viper.GetString("config.db.name"),
 		Password: viper.GetString("config.db.password"),
 	}
-	log := &Log{
+	log := Log{
 		Level: LogLevel(viper.GetString("config.log.level")),
 		Path:  viper.GetString("config.log.path"),
 	}
-	Conf = &Config{
-		Application: *application,
-		Db:          *db,
-		Log:         *log,
-	}
+	Conf.Application = application
+	Conf.Db = db
+	Conf.Log = log
 }
 
 func init() {
+	Conf = &Config{
+		Application: Application{},
+		Db:          Db{},
+		Log:         Log{},
+	}
 	InitConfig()
 }

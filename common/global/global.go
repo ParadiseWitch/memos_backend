@@ -15,11 +15,6 @@ var (
 	Config *config.Config
 )
 
-func GetConfig() *config.Config {
-	Config = config.Conf
-	return Config
-}
-
 func init() {
 	Engine = gin.New()
 	Config = config.Conf
