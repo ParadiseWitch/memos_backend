@@ -2,14 +2,13 @@ package router
 
 import (
 	"memos/common/global"
-	"memos/common/global/config"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func init() {
-	routerRole = append(routerRole, userInfoRouter)
+	global.Routers = append(global.Routers, userInfoRouter)
 }
 
 func userInfoRouter(v1 *gin.RouterGroup) {
@@ -24,6 +23,5 @@ func home(c *gin.Context) {
 		"name": "Maid",
 		"age":  14,
 		"msg":  global.Config.Application.Name,
-		"msg2": config.Conf.Application.Name,
 	})
 }

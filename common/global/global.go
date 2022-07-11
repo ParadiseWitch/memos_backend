@@ -11,11 +11,13 @@ const (
 )
 
 var (
-	Engine *gin.Engine
-	Config *config.Config
+	Engine  *gin.Engine
+	Config  *config.Config
+	Routers []func(*gin.RouterGroup)
 )
 
 func init() {
 	Engine = gin.New()
 	Config = config.Conf
+	Routers = make([]func(*gin.RouterGroup), 0)
 }

@@ -1,7 +1,7 @@
 package api
 
 import (
-	"memos/app/server/router"
+	"memos/app/router"
 
 	"github.com/spf13/cobra"
 )
@@ -23,14 +23,9 @@ var (
 	}
 )
 
-var AppRouters = make([]func(), 0)
-
 func init() {
 	StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "config/settings.yml", "Start server with provided configuration file")
 	StartCmd.PersistentFlags().BoolVarP(&apiCheck, "api", "a", false, "Start server with check api data")
-
-	// append server router
-	AppRouters = append(AppRouters, router.InitRouter)
 }
 
 func setup() {
