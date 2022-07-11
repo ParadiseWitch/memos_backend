@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -9,6 +10,7 @@ import (
 
 var (
 	Conf *Config
+	l    sync.Mutex
 )
 
 func initViper() {
@@ -26,10 +28,11 @@ func initViper() {
 	// watch conf file changed
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
+		l.Lock()
 		// callback if config file changed
 		fmt.Println("config file changed:", e.Name)
-		// FIXME: Concurrency issues, If you keep pressing save in the editor, panic will occur
 		InitConfig()
+		l.Unlock()
 	})
 }
 
