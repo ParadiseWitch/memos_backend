@@ -1,8 +1,8 @@
 package api
 
 import (
+	"memos/app/config"
 	"memos/app/router"
-	"memos/common/config"
 
 	"github.com/spf13/cobra"
 )

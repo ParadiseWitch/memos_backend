@@ -1,7 +1,7 @@
 package router
 
 import (
-	"memos/common/config"
+	"memos/app/config"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
