@@ -2,6 +2,7 @@ package api
 
 import (
 	"memos/app/router"
+	"memos/common/config"
 
 	"github.com/spf13/cobra"
 )
@@ -32,6 +33,7 @@ func setup() {
 }
 
 func run() error {
+	config.InitConf()
 	router.InitRouter()
 	return nil
 }
