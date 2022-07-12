@@ -1,8 +1,6 @@
 package global
 
 import (
-	"memos/common/global/config"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,13 +9,5 @@ const (
 )
 
 var (
-	Engine  *gin.Engine
-	Config  *config.Config
-	Routers []func(*gin.RouterGroup)
+	Engine *gin.Engine = gin.New()
 )
-
-func init() {
-	Engine = gin.New()
-	Config = config.Conf
-	Routers = make([]func(*gin.RouterGroup), 0)
-}

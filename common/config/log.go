@@ -1,8 +1,8 @@
 package config
 
 type Log struct {
-	Path  string   `json:"path"`
-	Level LogLevel `json:"level"`
+	Path  string   `mapstructure:"path"`
+	Level LogLevel `mapstructure:"level"`
 }
 
 type LogLevel string

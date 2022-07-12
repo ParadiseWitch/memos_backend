@@ -1,10 +1,10 @@
 package config
 
 type Application struct {
-	Mode AppMode `json:"mode"`
-	Host string  `json:"host"`
-	Name string  `json:"name"`
-	Port int     `json:"port"`
+	Mode AppMode `mapstructure:"mode"`
+	Host string  `mapstructure:"host"`
+	Name string  `mapstructure:"name"`
+	Port int     `mapstructure:"port"`
 }
 
 type AppMode string
