@@ -2,9 +2,9 @@ package config
 
 import (
 	"fmt"
-
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 var Conf *Config
@@ -12,10 +12,11 @@ var Conf *Config
 type Config struct {
 	Application Application `mapstructure:"application"`
 	Db          Db          `mapstructure:"db"`
-	Log         Logger      `mapstructure:"logger"`
+	Logger      Logger      `mapstructure:"logger"`
 }
 
 func InitConf() {
+	// TODO: get viper instance
 	defaultConfig()
 	viper.SetConfigName("settings")
 	viper.SetConfigType("yaml")
@@ -26,15 +27,19 @@ func InitConf() {
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		// callback if config file changed
-		fmt.Println("config file changed:", e.Name)
-		viper.Unmarshal(&Conf)
+		//fmt.Println("config file changed:", e.Name)
+		zap.L().Info("config file changed" + e.Name)
+		if err := viper.Unmarshal(&Conf); err != nil {
+			return
+		}
 	})
 	err := viper.ReadInConfig()
 	if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-		fmt.Println("config file not found")
 		panic(fmt.Errorf("fatal error config file:%s", err))
 	}
-	viper.Unmarshal(&Conf)
+	if err := viper.Unmarshal(&Conf); err != nil {
+		return
+	}
 }
 
 func defaultConfig() {
