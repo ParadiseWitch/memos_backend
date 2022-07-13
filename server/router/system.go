@@ -1,7 +1,8 @@
 package router
 
 import (
-	"memos/app/config"
+	"memos/server/config"
+	"memos/server/logger"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,7 @@ func sysInfoRouter(v1 *gin.RouterGroup) {
 }
 
 func sysInfoService(c *gin.Context) {
+	logger.GinLogger()
 	c.JSON(http.StatusOK, gin.H{
 		"msg": config.Conf,
 	})
