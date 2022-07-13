@@ -2,7 +2,6 @@ package router
 
 import (
 	"memos/server/config"
-	global2 "memos/server/global"
 	"memos/server/logger"
 	"strconv"
 
@@ -12,7 +11,7 @@ import (
 var Routers = make([]func(*gin.RouterGroup), 0)
 
 func InitRouter() {
-	r := global2.Engine
+	r := gin.Default()
 	v1 := r.Group("/api/v1")
 	for _, f := range Routers {
 		f(v1)
