@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -26,11 +27,10 @@ func InitConf() {
 	// watch conf file changed
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
-		// callback if config file changed
-		//fmt.Println("config file changed:", e.Name)
-		zap.L().Info("config file changed" + e.Name)
+		zap.L().Info("config file changed:" + e.Name)
 		if err := viper.Unmarshal(&Conf); err != nil {
-			return
+			zap.L().Error("config unmarshal error")
+			panic(fmt.Errorf("config unmarshal error:%s", err))
 		}
 	})
 	err := viper.ReadInConfig()
@@ -38,7 +38,7 @@ func InitConf() {
 		panic(fmt.Errorf("fatal error config file:%s", err))
 	}
 	if err := viper.Unmarshal(&Conf); err != nil {
-		return
+		panic(fmt.Errorf("config unmarshal error:%s", err))
 	}
 }
 
