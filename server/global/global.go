@@ -9,5 +9,5 @@ const (
 )
 
 var (
-	Engine *gin.Engine = gin.New()
+	Engine *gin.Engine = gin.Default()
 )
