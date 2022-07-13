@@ -1,8 +1,9 @@
-package api
+package server
 
 import (
-	"memos/app/config"
-	"memos/app/router"
+	"memos/server/config"
+	"memos/server/logger"
+	"memos/server/router"
 
 	"github.com/spf13/cobra"
 )
@@ -34,6 +35,9 @@ func setup() {
 
 func run() error {
 	config.InitConf()
+	if err := logger.Init(config.Conf.Logger, config.Conf.Application.Mode); err != nil {
+		return err
+	}
 	router.InitRouter()
 	return nil
 }
