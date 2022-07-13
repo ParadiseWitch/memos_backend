@@ -1,6 +1,6 @@
 package config
 
-type Log struct {
+type Logger struct {
 	Path  string   `mapstructure:"path"`
 	Level LogLevel `mapstructure:"level"`
 }

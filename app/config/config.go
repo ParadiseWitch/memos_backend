@@ -12,7 +12,7 @@ var Conf *Config
 type Config struct {
 	Application Application `mapstructure:"application"`
 	Db          Db          `mapstructure:"db"`
-	Log         Log         `mapstructure:"log"`
+	Log         Logger      `mapstructure:"logger"`
 }
 
 func InitConf() {
