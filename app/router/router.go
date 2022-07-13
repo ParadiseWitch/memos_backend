@@ -1,7 +1,9 @@
 package router
 
 import (
+	"memos/app/config"
 	"memos/common/global"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,5 +16,6 @@ func InitRouter() {
 	for _, f := range Routers {
 		f(v1)
 	}
-	r.Run()
+	addr := config.Conf.Application.Host + ":" + strconv.Itoa(config.Conf.Application.Port)
+	r.Run(addr)
 }
