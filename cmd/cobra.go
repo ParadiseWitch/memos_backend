@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"memos/cmd/api"
-	"memos/pkg"
+	"memos/common/pkg"
 	"os"
 
 	"github.com/spf13/cobra"
