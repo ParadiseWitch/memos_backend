@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"memos/cmd/server"
-	"memos/server/logger"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -18,7 +17,7 @@ var rootCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			tip()
-			return errors.New(logger.Red("requires at least one arg"))
+			return errors.New("requires at least one arg")
 		}
 		return nil
 	},
@@ -29,8 +28,7 @@ var rootCmd = &cobra.Command{
 }
 
 func tip() {
-	usageStr := `Welecome to ` + logger.Green(`memos.`) + `Use ` + logger.Red(`-h`) + ` for help`
-	fmt.Printf("%s\n", usageStr)
+	fmt.Printf(`Welecome to memos. Use -h for help`)
 }
 
 func init() {
