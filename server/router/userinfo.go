@@ -1,6 +1,7 @@
 package router
 
 import (
+	"memos/server/logger"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,6 +19,7 @@ func userInfoRouter(v1 *gin.RouterGroup) {
 }
 
 func home(c *gin.Context) {
+	logger.Error("userinforouter")
 	c.JSON(http.StatusOK, gin.H{
 		"name": "Maid",
 		"age":  14,

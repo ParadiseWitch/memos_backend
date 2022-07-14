@@ -20,7 +20,7 @@ func sysInfoRouter(v1 *gin.RouterGroup) {
 }
 
 func sysInfoService(c *gin.Context) {
-	logger.GinLogger()
+	logger.Info("sysinforouter")
 	c.JSON(http.StatusOK, gin.H{
 		"msg": config.Conf,
 	})
