@@ -2,10 +2,8 @@ package config
 
 import (
 	"fmt"
-
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 )
 
 var Conf *Config
@@ -27,9 +25,8 @@ func InitConf() {
 	// watch conf file changed
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
-		zap.L().Info("config file changed:" + e.Name)
+		fmt.Printf("config file changed. %s", e.String())
 		if err := viper.Unmarshal(&Conf); err != nil {
-			zap.L().Error("config unmarshal error")
 			panic(fmt.Errorf("config unmarshal error:%s", err))
 		}
 	})
