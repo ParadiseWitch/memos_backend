@@ -1,6 +1,6 @@
 module memos
 
-go 1.17
+go 1.18
 
 require (
 	github.com/natefinch/lumberjack v2.0.0+incompatible
