@@ -1,7 +1,6 @@
 package config
 
 type Logger struct {
-	Path       string `mapstructure:"path"`
 	Level      Level  `mapstructure:"level"`
 	Filename   string `mapstructure:"filename"`
 	MaxSize    int    `mapstructure:"max_size"`
