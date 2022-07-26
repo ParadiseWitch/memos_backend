@@ -14,14 +14,8 @@ var (
 			return true
 		},
 	}
-	AUTHORITY_LOGIN = Authority{
-		"login",
-		func(args map[string]interface{}) bool {
-			return true
-		},
-	}
 	AUTHORITY_EDIT = Authority{
-		"login",
+		"edit",
 		func(args map[string]interface{}) bool {
 			return args["user"] == nil
 		},

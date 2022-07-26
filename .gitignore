@@ -3,3 +3,4 @@ vendor
 .idea
 settings.yml
 logs/*
+log
