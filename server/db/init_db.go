@@ -1,14 +1,15 @@
-package database
+package db
 
 import (
 	"fmt"
 	"memos/server/config"
-	"memos/server/dto"
 	"memos/server/logger"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
+
+var DB *gorm.DB
 
 func InitDB() {
 	logger.Infof("Connecting to database %s:%d...", config.Conf.Db.Host, config.Conf.Db.Port)
@@ -20,18 +21,17 @@ func InitDB() {
 		config.Conf.Db.Host,
 		config.Conf.Db.Port,
 	)
-	db, err := gorm.Open("mysql", url)
+	DB, err := gorm.Open("mysql", url)
 	if err != nil {
 		logger.Panic(err)
-		panic(err)
 	}
-	db.DB().SetMaxIdleConns(10)
-	if !db.HasTable("users") {
-		db.CreateTable(&dto.User{})
-	}
-	db.Table("users").Create(&dto.User{})
-
-	if err := db.Close(); err != nil {
-		return
-	}
+	DB.DB().SetMaxIdleConns(10)
+	DB.SingularTable(true)
+	// if !db.HasTable("users") {
+	// 	db.CreateTable(&dto.User{})
+	// }
+	// db.Table("users").Create(&dto.User{})
+	// if err := db.Close(); err != nil {
+	// 	return
+	// }
 }

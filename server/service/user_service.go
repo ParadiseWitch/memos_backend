@@ -1,7 +1,7 @@
 package service
 
 import (
-	"memos/server/database"
+	"memos/server/db"
 	"memos/server/logger"
 	"net/http"
 
@@ -10,7 +10,7 @@ import (
 
 func UserInfo(c *gin.Context) {
 	logger.Error("userinforouter")
-	database.InitDB()
+	db.InitDB()
 	c.JSON(http.StatusOK, gin.H{
 		"name": "Maid",
 		"age":  14,
