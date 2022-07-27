@@ -1,8 +1,12 @@
 package config
 
 type Db struct {
-	Driver DbDirver `mapstructure:"driver"`
-	Url    string   `mapstructure:"url"`
+	Driver   DbDirver `mapstructure:"driver"`
+	Host     string   `mapstructure:"host"`
+	Port     int      `mapstructure:"port"`
+	Name     string   `mapstructure:"name"`
+	User     string   `mapstructure:"user"`
+	Password string   `mapstructure:"password"`
 }
 
 type DbDirver string

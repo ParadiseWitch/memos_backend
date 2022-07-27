@@ -1,10 +1,11 @@
 package service
 
 import (
-	"github.com/gin-gonic/gin"
 	"memos/server/database"
 	"memos/server/logger"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func UserInfo(c *gin.Context) {
