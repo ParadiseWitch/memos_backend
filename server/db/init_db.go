@@ -27,11 +27,6 @@ func InitDB() {
 	}
 	DB.DB().SetMaxIdleConns(10)
 	DB.SingularTable(true)
-	// if !db.HasTable("users") {
-	// 	db.CreateTable(&dto.User{})
-	// }
-	// db.Table("users").Create(&dto.User{})
-	// if err := db.Close(); err != nil {
-	// 	return
-	// }
+	InitTableRole()
+	InitTableUser()
 }
