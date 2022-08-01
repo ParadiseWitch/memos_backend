@@ -15,5 +15,6 @@ func userInfoRouter(v1 *gin.RouterGroup) {
 	{
 		r.GET("/info", service.GetUserById)
 		r.POST("/add", service.AddUser)
+		r.POST("/update", service.UpdateUserById)
 	}
 }

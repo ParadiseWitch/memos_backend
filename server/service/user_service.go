@@ -32,6 +32,18 @@ func GetUserById(c *gin.Context) {
 	c.JSON(http.StatusOK, util.CommonSuccRes(u))
 }
 
+func UpdateUserById(c *gin.Context) {
+	var u dto.User
+	err := c.BindJSON(&u)
+	if err != nil {
+		logger.Errorf("UpdateUserById err, err: %s", err)
+		c.JSON(http.StatusBadRequest,
+			util.CommonFailRes(http.StatusBadRequest, "invalid request"))
+	}
+	// oldU := getUserTable().Where("id = ?", u.ID)
+	getUserTable().Save(&u)
+}
+
 func AddUser(c *gin.Context) {
 	var u dto.User
 	err := c.BindJSON(&u)
