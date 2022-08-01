@@ -11,8 +11,9 @@ func init() {
 }
 
 func userInfoRouter(v1 *gin.RouterGroup) {
-	r := v1.Group("/userinfo")
+	r := v1.Group("/user")
 	{
-		r.GET("", service.UserInfo)
+		r.GET("/info", service.GetUserById)
+		r.POST("/add", service.AddUser)
 	}
 }
