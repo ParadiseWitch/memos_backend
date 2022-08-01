@@ -8,9 +8,17 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
 
-var userTable = db.DB.Table("user")
+var userTable *gorm.DB
+
+func getUserTable() *gorm.DB {
+	if userTable == nil {
+		userTable = db.DB.Table("user")
+	}
+	return userTable
+}
 
 func GetUserById(c *gin.Context) {
 	var u dto.User
@@ -20,7 +28,7 @@ func GetUserById(c *gin.Context) {
 		c.JSON(http.StatusBadRequest,
 			util.CommonFailRes(http.StatusBadRequest, "id is required"))
 	}
-	userTable.Where("id = ?", id).Find(&u)
+	getUserTable().Where("id = ?", id).Find(&u)
 	c.JSON(http.StatusOK, util.CommonSuccRes(u))
 }
 
@@ -32,5 +40,6 @@ func AddUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest,
 			util.CommonFailRes(http.StatusBadRequest, "invalid request"))
 	}
+	getUserTable().Create(&u)
 	c.JSON(http.StatusOK, util.CommonSuccRes(u))
 }
