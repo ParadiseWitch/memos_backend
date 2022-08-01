@@ -4,3 +4,4 @@ vendor
 settings.yml
 logs/*
 log
+temp
