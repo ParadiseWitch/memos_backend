@@ -21,7 +21,7 @@ func InitDB() {
 		config.Conf.Db.Host,
 		config.Conf.Db.Port,
 	)
-	DB, err = gorm.Open("mysql", url)
+	DB, err = gorm.Open(string(config.DBDRIVER_MYSQL), url)
 	if err != nil {
 		logger.Panic(err)
 	}
