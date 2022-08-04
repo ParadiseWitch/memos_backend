@@ -1,20 +1,10 @@
 package service
 
 import (
-	"memos/server/config"
 	"memos/server/dto"
-	"memos/server/logger"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
-
-func SysInfo(c *gin.Context) {
-	logger.Info("sysinforouter")
-	c.JSON(http.StatusOK, gin.H{
-		"msg": config.Conf,
-	})
-}
 
 func GetSysConfById(c *gin.Context) {
 	var s dto.SysConf
