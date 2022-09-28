@@ -1,0 +1,19 @@
+application:
+  name: memos
+  mode: dev
+  host: localhost
+  port: 8000
+db:
+  driver: mysql
+  host:
+  port:
+  name:
+  user:
+  password:
+logger:
+  # The log level： debug, info, warn, error, dpanic, panic, fatal
+  level: debug
+  filename: logs/log.txt
+  max_size: 0.1
+  max_age: 1
+  max_backups: 10
