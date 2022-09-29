@@ -2,6 +2,6 @@ vendor
 .vscode
 .idea
 settings.yml
-logs/*
+logs
 log
 temp
