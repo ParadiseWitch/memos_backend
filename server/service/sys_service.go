@@ -10,17 +10,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const TABLENAME = "sys_conf"
+const SYSCONF_TABLENAME = "sys_conf"
 
 func GetSysConfById(c *gin.Context) {
 	var s dto.SysConf
 	id, ok := c.GetQuery("id")
 	if !ok {
-		logger.Errorf("GetUserById err, id: %s", id)
-		c.JSON(http.StatusBadRequest,
-			util.CommonFailRes(http.StatusBadRequest, "id is required"))
+		logger.Errorf("GetSysConfById err, id: %s", id)
+		c.JSON(http.StatusBadRequest, util.CommonFailRes("id is required"))
+		return
 	}
-	db.DB.Table(TABLENAME).Where("id = ?", id).Find(&s)
+	if err := db.DB.Table(SYSCONF_TABLENAME).
+		Where("id = ?", id).
+		Find(&s).Error; err != nil {
+		logger.Warnf("GetSysConfById err, id: %d", id)
+		c.JSON(http.StatusOK, util.CommonFailRes("GetSysConfById err"))
+		return
+	}
 	c.JSON(http.StatusOK, util.CommonSuccRes(s))
 }
 
@@ -28,21 +34,28 @@ func UpdateSysConfById(c *gin.Context) {
 	var s dto.SysConf
 	err := c.BindJSON(&s)
 	if err != nil {
-		logger.Errorf("UpdateUserById err, err: %s", err)
-		c.JSON(http.StatusBadRequest,
-			util.CommonFailRes(http.StatusBadRequest, "invalid request"))
+		logger.Errorf("UpdateSysConfById err, err: %s", err)
+		c.JSON(http.StatusBadRequest, util.CommonFailRes("invalid request"))
+		return
 	}
-	db.DB.Table(TABLENAME).Save(&s)
+	if err := db.DB.Table(SYSCONF_TABLENAME).Save(&s).Error; err != nil {
+		logger.Warnf("UpdateSysConfById err, old sysconf: %s", s)
+		c.JSON(http.StatusOK, util.CommonFailRes("UpdateSysConfById err"))
+	}
 }
 
 func AddSysConf(c *gin.Context) {
 	var s dto.SysConf
 	err := c.BindJSON(&s)
 	if err != nil {
-		logger.Errorf("AddUser err, err: %s", err)
-		c.JSON(http.StatusBadRequest,
-			util.CommonFailRes(http.StatusBadRequest, "invalid request"))
+		logger.Errorf("AddSysConf err, err: %s", err)
+		c.JSON(http.StatusBadRequest, util.CommonFailRes("invalid request"))
+		return
 	}
-	db.DB.Table(TABLENAME).Create(&s)
+	if err := db.DB.Table(SYSCONF_TABLENAME).Create(&s).Error; err != nil {
+		logger.Warnf("AddSysConf err, data submitted: %s", s)
+		c.JSON(http.StatusOK, util.CommonFailRes("AddSysConf err"))
+		return
+	}
 	c.JSON(http.StatusOK, util.CommonSuccRes(s))
 }
