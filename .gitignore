@@ -2,7 +2,7 @@ vendor
 .vscode
 .idea
 settings.yml
-logs/*
+logs
 log
 temp
 __debug_bin.exe

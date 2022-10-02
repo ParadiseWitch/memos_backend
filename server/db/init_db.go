@@ -27,5 +27,6 @@ func InitDB() {
 	}
 	DB.DB().SetMaxIdleConns(10)
 	DB.SingularTable(true)
-	InitTableUser()
+	InitTable()
+	InitUserTableData()
 }

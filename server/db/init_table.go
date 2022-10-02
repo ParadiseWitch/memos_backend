@@ -6,15 +6,32 @@ import (
 )
 
 /**
- * 初始化用户表及其数据
+ * 初始化表
  */
-func InitTableUser() {
+func InitTable() {
+	if DB.HasTable(dto.SysConf{}) {
+		return
+	}
+	logger.Info(`models.sysconf: creating table "sys_conf"`)
+	if err := DB.CreateTable(dto.SysConf{}).Error; err != nil {
+		logger.Panic(err)
+	}
+
 	if DB.HasTable(dto.User{}) {
 		return
 	}
-	logger.Info(`models.role: creating table "role"`)
+	logger.Info(`models.user: creating table "user"`)
 	if err := DB.CreateTable(dto.User{}).Error; err != nil {
 		logger.Panic(err)
+	}
+}
+
+/**
+ * 初始化用户表数据
+ */
+func InitUserTableData() {
+	if DB.HasTable(dto.User{}) {
+		return
 	}
 	DB.Create(&dto.User{
 		ID:       1,
