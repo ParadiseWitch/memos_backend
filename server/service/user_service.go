@@ -1,87 +1,118 @@
 package service
 
 import (
+	"crypto/md5"
+	"encoding/hex"
+	"fmt"
 	"memos/server/db"
 	"memos/server/dto"
-	"memos/server/logger"
-	"memos/server/util"
-	"net/http"
+	"memos/server/ex"
 
 	"github.com/gin-gonic/gin"
 )
 
 const USER_TABLENAME = "user"
 
-func GetUserById(c *gin.Context) {
+const secret = "memos"
+
+func encryptPassword(data []byte) (result string) {
+	h := md5.New()
+	h.Write([]byte(secret))
+	return hex.EncodeToString(h.Sum(data))
+}
+
+func Register(c *gin.Context) (data any, err *ex.HttpEX) {
+	var paramU dto.User
+	if err := c.BindJSON(&paramU); err != nil {
+		return nil, ex.New(nil, ex.EC_INVALID_PARAM, "register err")
+	}
+
+	_, err = GetUserByName(paramU.Name)
+	if err == nil || err.Code != ex.EC_DATA_NOT_EXIST {
+		// 该用户已经注册
+		return nil, ex.New(nil, ex.EC_USER_HAS_REGISTERED, "name="+paramU.Name)
+	}
+
+	paramU.Password = encryptPassword([]byte(paramU.Password))
+	if err := db.DB.Create(&paramU).Error; err != nil {
+		return nil, ex.New(err, ex.EC_DB_OP_ERROR, "name="+paramU.Name)
+	}
+	return nil, nil
+}
+
+func Login(c *gin.Context) (data any, e *ex.HttpEX) {
+	var paramU dto.User
+	if err := c.BindJSON(&paramU); err != nil {
+		return nil, ex.New(nil, ex.EC_INVALID_PARAM, "login err")
+	}
+
+	resultU, err := GetUserByName(paramU.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	if resultU.Password != encryptPassword([]byte(paramU.Password)) {
+		return nil, ex.New(nil, ex.EC_PSD_MISTAKE, "name="+paramU.Name)
+	}
+	return nil, nil
+}
+
+func GetUserById(c *gin.Context) (data any, e *ex.HttpEX) {
 	var u dto.User
 	id, ok := c.GetQuery("id")
 	if !ok {
-		logger.Errorf("GetUserById err, id: %s", id)
-		c.JSON(http.StatusBadRequest, util.CommonFailRes("id is required"))
-		return
+		return nil, ex.New(nil, ex.EC_INVALID_PARAM, "id is require, id="+id)
 	}
-	if err := db.DB.Table(USER_TABLENAME).Where("id = ?", id).Find(&u).Error; err != nil {
-		logger.Infof("The user does not exist. uid: %d", id)
-		c.JSON(http.StatusOK, util.CommonFailRes("The user does not exist"))
-		return
+	rset := db.DB.Table(USER_TABLENAME).Where("id = ?", id).Find(&u)
+	if rset.RecordNotFound() {
+		return nil, ex.New(rset.Error, ex.EC_DATA_NOT_EXIST, "getuserbyid: the user does not exist. uid="+id)
 	}
-	c.JSON(http.StatusOK, util.CommonSuccRes(u))
-
+	if rset.Error != nil {
+		return nil, ex.New(rset.Error, ex.EC_DB_OP_ERROR, "getuserbyid err, uid="+id)
+	}
+	return u, nil
 }
 
-func Login(c *gin.Context) {
-	var paramU dto.User
-	// TODO encryption password
-	if err := c.BindJSON(&paramU); err != nil {
-		logger.Errorf("Login err, err: %s", err)
-		c.JSON(http.StatusBadRequest, util.CommonFailRes("invalid request"))
-		return
-	}
-
+func GetUserByName(name string) (*dto.User, *ex.HttpEX) {
 	var resultU dto.User
-
-	if err := db.DB.Table(USER_TABLENAME).
-		Where("name = ?", paramU.Name).
-		Find(&resultU).Error; err != nil {
-		logger.Infof("The user not exist. name: %d", paramU.Name)
-		c.JSON(http.StatusOK, util.CommonFailRes("The user not exist"))
-		return
+	rset := db.DB.Table(USER_TABLENAME).Where("name = ?", name).Find(&resultU)
+	if rset.RecordNotFound() {
+		return nil, ex.New(rset.Error, ex.EC_DATA_NOT_EXIST, "the user not exist, name: "+name)
 	}
-
-	if resultU.Password != paramU.Password {
-		logger.Infof("Password mistake, name: %s", paramU.Name)
-		c.JSON(http.StatusOK, util.CommonFailRes("Password mistake"))
-		return
+	if rset.Error != nil {
+		return nil, ex.New(rset.Error, ex.EC_DB_OP_ERROR, "getuserbyname err, name="+name)
 	}
-	c.JSON(http.StatusOK, util.CommonSuccRes(nil))
+	return &resultU, nil
 }
 
-func UpdateUserById(c *gin.Context) {
+func UpdateUserById(c *gin.Context) (data any, e *ex.HttpEX) {
 	var u dto.User
 	err := c.BindJSON(&u)
 	if err != nil {
-		logger.Errorf("UpdateUserById err, err: %s", err)
-		c.JSON(http.StatusBadRequest, util.CommonFailRes("invalid request"))
-		return
+		return nil, ex.New(err, ex.EC_INVALID_PARAM, "")
 	}
 	if err := db.DB.Table(USER_TABLENAME).Save(&u).Error; err != nil {
-		logger.Warnf("UpdateUserById err, err: %s", err)
-		c.JSON(http.StatusBadRequest, util.CommonFailRes("UpdateUserById err"))
+		return nil, ex.New(err, ex.EC_DB_OP_ERROR, fmt.Sprintf("updateuserbyid err, data submitted:%+v", u))
 	}
+	return nil, nil
 }
 
-func AddUser(c *gin.Context) {
+func UpdateUserByName(name string) (*dto.User, *ex.HttpEX) {
+	var resultU dto.User
+	if err := db.DB.Table(USER_TABLENAME).Save(&resultU).Error; err != nil {
+		return nil, ex.New(err, ex.EC_DB_OP_ERROR, "UpdateUserByName err, name="+name)
+	}
+	return &resultU, nil
+}
+
+func AddUser(c *gin.Context) (data any, e *ex.HttpEX) {
 	var u dto.User
 	err := c.BindJSON(&u)
 	if err != nil {
-		logger.Errorf("AddUser err, err: %s", err)
-		c.JSON(http.StatusBadRequest, util.CommonFailRes("invalid request"))
-		return
+		return nil, ex.New(err, ex.EC_INVALID_PARAM, "")
 	}
 	if err := db.DB.Table(USER_TABLENAME).Create(&u).Error; err != nil {
-		logger.Errorf("AddUser err, err: %s", err)
-		c.JSON(http.StatusBadRequest, util.CommonFailRes("AddUser err"))
-		return
+		return nil, ex.New(err, ex.EC_DB_OP_ERROR, fmt.Sprintf("adduser err, data submitted:%+v", u))
 	}
-	c.JSON(http.StatusOK, util.CommonSuccRes(u))
+	return u, nil
 }
