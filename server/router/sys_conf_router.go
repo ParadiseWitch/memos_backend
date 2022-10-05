@@ -13,8 +13,8 @@ func init() {
 func sysConfInfoRouter(v1 *gin.RouterGroup) {
 	r := v1.Group("/sys")
 	{
-		r.GET("/info", service.GetSysConfById)
-		r.POST("/update", service.UpdateSysConfById)
-		r.POST("/add", service.AddSysConf)
+		r.GET("/info", service.CommonHandle(service.GetSysConfById))
+		r.POST("/update", service.CommonHandle(service.UpdateSysConfById))
+		r.POST("/add", service.CommonHandle(service.AddSysConf))
 	}
 }
