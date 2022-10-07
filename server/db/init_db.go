@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 	"memos/server/config"
+	"memos/server/dto"
 	"memos/server/logger"
 
 	"github.com/jinzhu/gorm"
@@ -21,7 +22,7 @@ func InitDB() {
 		config.Conf.Db.Host,
 		config.Conf.Db.Port,
 	)
-	DB, err = gorm.Open(string(config.DBDRIVER_MYSQL), url)
+	DB, err = gorm.Open(string(dto.DBDRIVER_MYSQL), url)
 	if err != nil {
 		logger.Panic(err)
 	}

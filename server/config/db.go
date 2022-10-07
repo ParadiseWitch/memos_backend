@@ -7,11 +7,3 @@ type Db struct {
 	User     string `mapstructure:"user"`
 	Password string `mapstructure:"password"`
 }
-
-type DbDirver string
-
-const (
-	DBDRIVER_MYSQL    DbDirver = "mysql"
-	DBDRIVER_POSTGRES DbDirver = "postgres"
-	DBDRIVER_SQLITE   DbDirver = "sqlite"
-)

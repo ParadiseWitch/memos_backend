@@ -1,7 +1,7 @@
 package service
 
 import (
-	"memos/server/config"
+	"memos/server/dto"
 	"memos/server/ex"
 	"memos/server/logger"
 	"net/http"
@@ -47,10 +47,10 @@ func HandlerHttpEx(ex ex.HttpEX, c *gin.Context) {
 	c.JSON(httpCode, CommonFailRes(tipMsg))
 }
 
-func LogByLevel(l config.Level, msg string) {
-	if l == config.LOGLEVEL_WARN {
+func LogByLevel(l dto.Level, msg string) {
+	if l == dto.LOGLEVEL_WARN {
 		logger.Warn(msg)
-	} else if l == config.LOGLEVEL_ERROR {
+	} else if l == dto.LOGLEVEL_ERROR {
 		logger.Error(msg)
 	}
 }

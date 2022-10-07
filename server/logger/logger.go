@@ -2,6 +2,7 @@ package logger
 
 import (
 	"memos/server/config"
+	"memos/server/dto"
 	"os"
 
 	"github.com/natefinch/lumberjack"
@@ -46,7 +47,7 @@ func Init() (err error) {
 		return
 	}
 	var core zapcore.Core
-	if mode == config.APPMODE_DEV {
+	if mode == dto.APPMODE_DEV {
 		// 进入开发模式，日志输出到终端
 		consoleEncoder := zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
 		core = zapcore.NewTee(

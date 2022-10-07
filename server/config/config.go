@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"memos/server/dto"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -42,6 +43,6 @@ func InitConf() {
 
 func defaultConfig() {
 	// set default config file
-	viper.SetDefault("config.application.mode", APPMODE_DEV)
+	viper.SetDefault("config.application.mode", dto.APPMODE_DEV)
 	viper.SetDefault("config.application.port", 8080)
 }
