@@ -1,21 +1,35 @@
 package main
 
 import (
-	"memos/server/config"
+	"fmt"
 	"memos/server/dto"
-	"memos/server/ioc"
 
+	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 func main() {
-	ioc.Provide(NewLogger)
-	l := ioc.Invoke[*config.Logger]()
-	print(l)
-}
+	url := "root:123456@tcp(maiiiiiid.fun:23306)/memos?charset=utf8&parseTime=True&loc=Local&timeout=1000ms"
 
-func NewLogger() *config.Logger {
-	return &config.Logger{
-		Level: dto.LOGLEVEL_DEBUG,
+	DB, err := gorm.Open("mysql", url)
+	if err != nil {
+		fmt.Print(err)
 	}
+	// DB.DB().SetMaxIdleConns(10)
+	// DB.SingularTable(true)
+	// var u dto.User
+	// r := map[string]interface{}{
+	// 	// "id":   1,
+	// 	"name": "admin",
+	// }
+
+	var u dto.User
+	rset := DB.Table("user").Where("name = ?", "xxx")
+	// count := 0
+	// rset.Count(&count)
+	if rset.Find(&u).RecordNotFound() {
+		print("not found")
+		return
+	}
+	fmt.Print(u)
 }
