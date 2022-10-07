@@ -37,7 +37,7 @@ func setup() {
 func run() error {
 	config.InitConf()
 
-	if err := logger.Init(config.Conf.Logger, config.Conf.Application.Mode); err != nil {
+	if err := logger.Init(); err != nil {
 		return err
 	}
 

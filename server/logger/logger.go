@@ -34,7 +34,10 @@ var (
 )
 
 // Init 初始化lg
-func Init(cfg config.Logger, mode config.AppMode) (err error) {
+func Init() (err error) {
+
+	cfg := config.Conf.Logger
+	mode := config.Conf.Application.Mode
 	writeSyncer := getLogWriter(cfg.Filename, cfg.MaxSize, cfg.MaxBackups, cfg.MaxAge)
 	encoder := getEncoder()
 	var l = new(zapcore.Level)
