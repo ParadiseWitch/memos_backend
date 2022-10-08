@@ -15,10 +15,10 @@ const USER_TABLENAME = "user"
 
 const secret = "memos"
 
-func encryptPassword(data []byte) (result string) {
+func encryptPassword(str string) (result string) {
 	h := md5.New()
-	h.Write([]byte(secret))
-	return hex.EncodeToString(h.Sum(data))
+	h.Write([]byte(secret + str))
+	return hex.EncodeToString(h.Sum(nil))
 }
 
 func Register(c *gin.Context) (data any, err *ex.HttpEX) {
@@ -33,7 +33,7 @@ func Register(c *gin.Context) (data any, err *ex.HttpEX) {
 		return nil, ex.New(nil, ex.EC_USER_HAS_REGISTERED, "name="+paramU.Name)
 	}
 
-	paramU.Password = encryptPassword([]byte(paramU.Password))
+	paramU.Password = encryptPassword(paramU.Password)
 	if err := db.DB.Create(&paramU).Error; err != nil {
 		return nil, ex.New(err, ex.EC_DB_OP_ERROR, "name="+paramU.Name)
 	}
@@ -51,7 +51,7 @@ func Login(c *gin.Context) (data any, e *ex.HttpEX) {
 		return nil, err
 	}
 
-	if resultU.Password != encryptPassword([]byte(paramU.Password)) {
+	if resultU.Password != encryptPassword(paramU.Password) {
 		return nil, ex.New(nil, ex.EC_PSD_MISTAKE, "name="+paramU.Name)
 	}
 	return nil, nil
