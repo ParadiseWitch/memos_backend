@@ -8,7 +8,7 @@ import (
 )
 
 type MyClaims struct {
-	UserID int `json:"user_id"`
+	UserID int64 `json:"user_id"`
 	jwt.StandardClaims
 }
 
@@ -20,9 +20,9 @@ func keyFunc(_ *jwt.Token) (i interface{}, err error) {
 	return mySecret, nil
 }
 
-func GetToken(userID int) (token string, err error) {
+func GetToken(userID int64) (token string, err error) {
 	c := MyClaims{
-		userID, // 自定义字段
+		userID,
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(TokenExpireDuration).Unix(),
 			Issuer:    "memos",
