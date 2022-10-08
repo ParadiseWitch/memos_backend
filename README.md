@@ -13,7 +13,7 @@ cp template-settings.yml settings.yml
 # 5. run
 go run main.go server
 ```
-You can also run it by adding an alaunch.json file
+You can also run it by adding an launch.json file
 ```
 {
   "configurations": [
