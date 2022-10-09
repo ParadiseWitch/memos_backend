@@ -3,10 +3,10 @@ package ex
 type HttpEX struct {
 	e         error
 	DetailMsg string
-	Code      *ExCode
+	Code      ExCode
 }
 
-func New(e error, code *ExCode, detailMsg string) *HttpEX {
+func New(e error, code ExCode, detailMsg string) *HttpEX {
 	nativeErrorMsg := "nil"
 	if e != nil {
 		nativeErrorMsg = e.Error()

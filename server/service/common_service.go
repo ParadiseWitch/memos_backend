@@ -18,10 +18,10 @@ func CommonSuccRes(data interface{}) gin.H {
 	}
 }
 
-func CommonFailRes(err string) gin.H {
+func CommonFailRes(msg string) gin.H {
 	return gin.H{
 		"status": "fail",
-		"error":  err,
+		"msg":    msg,
 	}
 }
 
@@ -41,8 +41,8 @@ func CommonHandle(hander servicehander) func(c *gin.Context) {
 func HandlerHttpEx(ex ex.HttpEX, c *gin.Context) {
 	exCode := ex.Code
 	httpCode := exCode.HttpCode
-	logMsg := exCode.Msg + ", " + ex.DetailMsg
-	tipMsg := exCode.Msg
+	logMsg := exCode.LogMsg + ", " + ex.DetailMsg
+	tipMsg := exCode.TipMsg
 	LogByLevel(exCode.LogLevel, logMsg)
 	c.JSON(httpCode, CommonFailRes(tipMsg))
 }
