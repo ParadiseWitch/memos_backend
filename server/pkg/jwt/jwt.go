@@ -20,7 +20,7 @@ func keyFunc(_ *jwt.Token) (i interface{}, err error) {
 	return mySecret, nil
 }
 
-func GetToken(userID int64) (token string, err error) {
+func GenToken(userID int64) (token string, err error) {
 	c := MyClaims{
 		userID,
 		jwt.StandardClaims{
