@@ -56,3 +56,12 @@ func EC_USER_HAS_REGISTERED() ExCode {
 		TipMsg:   "账号已被注册",
 	}
 }
+
+func EC_GEN_TOKEN_ERROR() ExCode {
+	return ExCode{
+		LogLevel: dto.LOGLEVEL_WARN,
+		HttpCode: http.StatusOK,
+		LogMsg:   "generate token error",
+		TipMsg:   "生成令牌失败",
+	}
+}
