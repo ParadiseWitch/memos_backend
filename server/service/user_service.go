@@ -7,6 +7,7 @@ import (
 	"memos/server/db"
 	"memos/server/dto"
 	"memos/server/ex"
+	"memos/server/pkg/jwt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -46,15 +47,24 @@ func Login(c *gin.Context) (data any, e *ex.HttpEX) {
 		return nil, ex.New(nil, ex.EC_INVALID_PARAM(), "login err")
 	}
 
-	resultU, err := GetUserByName(paramU.Name)
-	if err != nil {
-		return nil, err
+	resultU, e := GetUserByName(paramU.Name)
+	if e != nil {
+		return nil, e
 	}
 
 	if resultU.Password != encryptPassword(paramU.Password) {
 		return nil, ex.New(nil, ex.EC_PSD_MISTAKE(), "name="+paramU.Name)
 	}
-	return nil, nil
+
+	token, err := jwt.GenToken(resultU.ID)
+	if err != nil {
+		return nil, ex.New(err, ex.EC_GEN_TOKEN_ERROR(), "uid: "+string(rune(resultU.ID)))
+	}
+	return map[string]any{
+		"token":  token,
+		"name":   resultU.Name,
+		"avatar": resultU.Avatar,
+	}, nil
 }
 
 func GetUserById(c *gin.Context) (data any, e *ex.HttpEX) {
