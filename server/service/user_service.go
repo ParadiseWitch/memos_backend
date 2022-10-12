@@ -64,6 +64,7 @@ func Login(c *gin.Context) (data any, e *ex.HttpEX) {
 		"token":  token,
 		"name":   resultU.Name,
 		"avatar": resultU.Avatar,
+		"role":   resultU.Role,
 	}, nil
 }
 
